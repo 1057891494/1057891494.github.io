@@ -8,16 +8,56 @@
     <title>笔记心得</title>
 </head>
 <style>
-.Que{font-size: 25px;background-color: #E67C7C;}
-.Ans{font-size: 25px;background-color: #E67C7C;}
-p{font-size: 18px;}
+    .Que {
+        font-size: 25px;
+        background-color: #E67C7C;
+    }
+
+    .Ans {
+        font-size: 25px;
+        background-color: #9EE284;
+    }
+
+    p {
+        font-size: 18px;
+    }
 </style>
+
 <body>
     <div>
-        <span class="Que">Question:</span><p>div p:nth-child(1)并没有指向第一个p标签</p>
+        <span class="Que">Question:</span>
+        <p>div p:nth-child(1)并没有指向第一个p标签</p>
     </div>
     <div>
-        <span class="Ans">Answer:</span><p>nth-child()选择器不区分元素类型，默认从第一个元素开始，需要添加选择的类型，可以使用p:nth-of-type()</p>
+        <span class="Ans">Answer:</span>
+        <p>nth-child()选择器不区分元素类型，默认从第一个元素开始，需要添加选择的类型，可以使用p:nth-of-type()</p>
+    </div>
+    <div>
+        <span class="Que">Question:</span>
+        <p>由于canvas存在canvas和canvas.getBoundingClientRect()两个画布，需要解决缩放问题</p>
+    </div>
+    <div>
+        <span class="Ans">Answer:</span>
+        <p>left:(left-canvasLeft+width/2)/(bbox.width/canvas.width), top:(top-canvasTop+height/2)/(bbox.height/canvas.height)
+            其中 bbox=canvas.getBoundingClientRect(); left为鼠标距离html左侧距离，canvasLeft为画布在html中left距离,width为触发事件园的宽度， (bbox.width/canvas.width)为缩放比例，图画都会首先画在canvas中，然后缩放到bbox
+        </p>
+    </div>
+    <div>
+        <span class="Que">Question:</span>
+        <p>canvas中画的圆会变成椭圆</p>
+    </div>
+    <div>
+        <span class="Ans">Answer:</span>
+        <p>canvas默认大小为300*150，需要人为指定大小</p>
+    </div>
+    <div>
+        <span class="Que">Question:</span>
+        <p>图形之间会画出意想不到的线条</p>
+    </div>
+    <div>
+        <span class="Ans">Answer:</span>
+        <p>画完之后使用close Path（）闭合 可以选择closePath(); context.stroke(); 或者 context.stroke(); closePath();
+        </p>
     </div>
 </body>
 
