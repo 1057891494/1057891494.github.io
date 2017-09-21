@@ -7,13 +7,17 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>笔记心得</title>
 </head>
-
+<style>
+.Que{font-size: 25px;background-color: #E67C7C;}
+.Ans{font-size: 25px;background-color: #E67C7C;}
+p{font-size: 18px;}
+</style>
 <body>
     <div>
-        <span>Question:</span><span>div p:nth-child(1)并没有指向第一个p标签</span>
+        <span class="Que">Question:</span><p>div p:nth-child(1)并没有指向第一个p标签</p>
     </div>
     <div>
-        <span>Answer:</span><span>nth-child()选择器不区分元素类型，默认从第一个元素开始，需要添加选择的类型，可以使用p:nth-of-type()</span>
+        <span class="Ans">Answer:</span><p>nth-child()选择器不区分元素类型，默认从第一个元素开始，需要添加选择的类型，可以使用p:nth-of-type()</p>
     </div>
 </body>
 
