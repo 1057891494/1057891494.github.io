@@ -1,0 +1,164 @@
+$scope对象
+	创建：由$injector
+	链接：$scope链接到视图中，同时被注册到$watch中被监视
+	更新:$watch检测到$scope发生变化（$watch会监视$scope的总scope，$rootScoop），调用回掉函数
+	销毁:$scope调用$destory()销毁自己
+
+//使用$parse手动解析expr
+<div ng-controller="MyController">
+   <input ng-model="expr" type="text" placeholder="Enter an expression" />
+   <h2>{{ parseValue }}</h2>
+</div> 
+
+angular.module("myApp", []).controller('MyController',  function($scope,$parse) {
+   $scope.$watch('expr', function(newVal, oldVal, scope) {
+        if (newVal !== oldVal) {       // 用该表达式设置parseFun
+               var parseFun = $parse(newVal);       // 获取经过解析后表达式的值
+               $scope.parsedValue = parseFun(scope);
+        }
+    });
+}); 
+
+P22开头部分没看懂
+第七章为常用知识
+
+template: '<a href="{{ myUrl }}">{{ myLinkText }}</a>' 
+<div my-directive my-url="http://google.com" my-link-text="Click me to go to Google"></div>
+使用上面方式并不能将解析式内容替换，需要使用绑定策略：
+scope:{
+	myUrl:'@',
+	mylinkText:'@'
+} 
+或者
+template: '<a href="{{ myUrl }}">{{ myLinkText }}</a>'
+<div my-directive my-attr="http://google.com" my-link-text="Click me to go to Google"></div>
+使用上面方式并不能将解析式内容替换，需要使用绑定策略：
+scope:{
+	myUrl:'@myAttr',
+	mylinkText:'@'
+}
+注意：myAttr变成了my-attr
+
+内部指令：
+ng-disabled   （true,false）  禁止输入
+	<input> （text、checkbox、radio、number、url, email、submit）
+	<textarea>
+	<select>
+	<button>
+ ng-readonly  （true,false）
+ ng-checked   （true,false）
+ 	checkbox
+ 	radio
+ ng-selected  （true,false）
+ 	option
+ ng-href
+ 	a
+ ng-src
+ 	img
+
+ ng-app   $rootScope起点
+ ng-controller="控制器名"
+
+ <div ng-controller="SomeController">     {{ someBareValue }}     <button ng-click="someAction()">Communicate to child</button>     <div ng-controller="ChildController">         {{ someBareValue }}         <button ng-click="childAction()">Communicate to parent</button>     </div> </div> 
+ 
+angular.module('myApp', [])
+	.controller('SomeController', function($scope) {
+     	// 反模式，裸值     
+     	$scope.someBareValue = 'hello computer';     
+     	// 设置 $scope 本身的操作，这样没问题     
+     	$scope.someAction = function() {         
+     		// 在SomeController和ChildController中设置{{ someBareValue }}
+     		$scope.someBareValue = 'hello human, from parent';
+     	};
+    }).controller('ChildController', function($scope) {
+     	   $scope.childAction = function() {
+     	        // 在ChildController中设置{{ someBareValue }}
+         		$scope.someBareValue = 'hello human, from child';
+            };
+        }); 
+父子控制器嵌套,子控制器复制父控制器的值
+注：布尔，数字，字符串直接复制值，对象，函数，数组则复制引用指针。
+	修改父控制器值会影响子控制器。（子控制器对父控制器是原型继承关系）
+	修改子控制器布尔，数字，字符串不会影响父控制器，
+	修改子控制器对象，函数，数组则会影响父控制器。
+
+ng-include   可以加载、编译并包含外部HTML片段到当前的应用中。
+	使用ng-include时AngularJS会自动创建一个子作用域。
+	如果你想使用某个特定的作用域，
+	例如ControllerA的作用域，必须在同一个DOM元素上添加ng-controller ="ControllerA" 指令
+	<div ng-include="/myTemplateName.html" ng-controller="MyController" ng-init="name='World'">
+	     Hello {{ name }}
+	</div> 
+
+ng-if
+ng-show
+ng-hide
+
+ng-repeat
+	$index：遍历的进度（0...length-1）。
+	$first：当元素是遍历的第一个时值为true。
+	$middle：当元素处于第一个和后元素之间时值为true。
+	$last：当元素是遍历的后一个时值为true。
+	$even：当$index值是偶数时值为true。
+	$odd：当$index值是奇数时值为true。
+
+ng-init
+ng-bind
+ng-model
+
+ng-form   实现表单嵌套
+	CSS类：
+		表单合法时设置ng-valid；
+		表单不合法时设置ng-invlid；
+		表单未进行修改时设置ng-pristion；
+		表单进行过修改时设置ng-dirty
+
+ng-options    需要和ng-model配合使用，v-model为遍历的子元素的value值
+	<div ng-app="myApp" ng-controller="myCtrl">
+		<select 
+			ng-init="selectedName = names[0]"
+		    ng-model="selectedName"
+		    ng-options="x for x in names">
+		</select>
+	</div>
+	var app = angular.module('myApp', []);
+	app.controller('myCtrl', function($scope) {
+	    $scope.names = ["Google", "Runoob", "Taobao"];
+	});
+
+ng-submit  会阻止form的submit行为
+ng-class
+ng-attr-(suffix)  针对严格标签进行使用
+	<svg>
+	     <circle ng-attr-cx="{{ cx }}"><circle>
+	</svg> 
+
+
+指令
+	scope:
+		false:与父scope共享一个作用域
+		true：继承父作用域的值，但作用于相互隔离
+		对象：{}
+			通过绑定策略与父作用域建立联系、
+			@ 单向绑定 元素中使用someAttr="{{value}}"
+			= 双向绑定 元素中使用someAttr="value"
+			& 绑定方法 元素中使用someAttr="value()"
+
+compile和link选项是互斥的。
+如果同时设置了这两个选项，那么会把compile 所返回的函数当作链接函数，而link选项本身则会被忽略。
+
+编译函数负责对模板DOM进行转换。 
+链接函数负责将作用域和DOM进行链接 
+
+require:"?ngModel"
+    ?ngModel:从上游指令中查找ngModel
+    ^ngModel:从当前指令中查找，没有返回null
+    ngModel:从当前指令查找
+ngModel.$setViewValue(newValue);
+
+service服务
+	factory方法：返回有属性有方法的实例对象
+	service方法：将属性和方法加到this上，需要通过new才能获得实例对象
+	provider方法：同factory，但可以通过config额外配置service服务,使其更具适应性
+	constant方法：值不能改变
+	value方法：只可以改变
