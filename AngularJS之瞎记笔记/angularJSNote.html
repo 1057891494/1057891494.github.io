@@ -157,8 +157,80 @@ require:"?ngModel"
 ngModel.$setViewValue(newValue);
 
 service服务
-	factory方法：返回有属性有方法的实例对象
-	service方法：将属性和方法加到this上，需要通过new才能获得实例对象
-	provider方法：同factory，但可以通过config额外配置service服务,使其更具适应性
-	constant方法：值不能改变
-	value方法：只可以改变
+	factory(name, $getFn)：返回有属性有方法的实例对象
+
+						   如果工厂对象仅仅包含$get()方法，该方法是provider对象方式的替代，
+						   等价于provider(name, {$get: $getFn})
+
+	service(name, constructor)：将属性和方法加到this上，需要通过new才能获得实例对象
+	provider(name, provider)：同factory，但如果需要通过config额外配置service服务,则必须使用该方法
+
+							  name(string):实例名，工厂名称为name+'Provider'
+
+							  provider（Object|Function|Array）:
+							  	1.如果采用对象方式，必须包含$get()方法，$get方法将通过$injector.invoke()进行；
+							  	2.如果采用函数方式，该函数将被看作工厂的构造函数
+							  	（工厂的工厂，用来产生工厂实例，如GreetProvider），
+							  	工厂将采用$injector.instantiate()创建工厂对象；
+							  	3.如果采用数组方式，会被当做一个带有行内依赖注入声明的函数来处理。
+							  	数组的后一个元素应该是函数，可以返回一个带有$get方法的对象
+
+						例子：
+							 function GreetProvider() {
+			    				var salutation = 'Hello';
+			    				this.salutation = function (text) {
+						        	salutation = text;
+						     	};
+						    	this.$get = function () {
+						        	return function (name) {
+						            	return salutation + ' ' + name + '!';
+						        	};
+						    	};
+							 }
+							 var module = …;
+							 //config方法需要一个方法作为参数，该方法将用来对服务进行统一配置
+							//当对模块进行配置时，
+							//需要格外注意只有少数几种类型的对象可以被注入到config()函
+							//数中：提供者和常量。如果我们将一个服务注入进去，
+							//会在真正对其进行配置之前就意外地把服务实例化了。
+							 module.config(function ($provide) {
+							    $provide.provider(‘greet’, GreetProvider);
+							 });
+	constant(name, value)：值不能改变,该方法会在所有配置块（config）之前被执行
+	value(name, constructor)：值可以改变
+
+
+依赖注入的三种方式：
+	1.数组标注
+		someModule.controller('MyController', ['$scope', 'greeter', function($scope, greeter) {
+  					// todo Something
+		}]);
+	2.$inject属性
+		var MyController = function($scope, greeter) {
+  				// ...
+		}
+		MyController.$inject = ['$scope', 'greeter'];
+		someModule.controller('MyController', MyController);
+	3.隐式声明依赖
+		someModule.controller('MyController', function($scope, greeter) {
+  				// ...
+		});
+	第三种方式不能被minify（合并压缩），推荐使用前两种
+
+mod.run(Fn);
+	run里允许注入的是实例和常量
+
+	服务/阶段	provider	factory	  service	value	constant
+	config阶段	  Yes	      No	   No	     No	       Yes
+	run 阶段		  Yes	      Yes	   Yes	     Yes	   Yes
+
+	注意，provider 在config阶段，注入的时候需要加上 provider 后缀，可以调用非 $get 返回的方法
+	在 run 阶段注入的时候，无需加 provider 后缀，只能调用 $get 返回的方法
+
+杂记：
+	状 态 码                                  含  义
+ 	  200                                    一切正常 
+ 	  401                                   未授权的请求 
+ 	  403                                   禁止的请求 
+ 	  404                                   页面找不到 
+ 	  500                                   服务器错误 

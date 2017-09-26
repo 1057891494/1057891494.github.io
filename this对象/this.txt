@@ -1,0 +1,110 @@
+var o = {
+    x : 1,
+    func : function() { console.log(this.x) },
+    test : function() {
+        setTimeout(function() {
+            this.func();
+        }, 100);
+    }
+};
+o.test(); // TypeError : this.func is not a function
+因为this的指向从o变为了全局（函数调用中的this都是指向全局的）
+需要修改为：
+var o = {
+    x : 1,
+    func : function() { console.log(this.x) },
+    test : function() {
+        var _this = this;
+        setTimeout(function() {
+            _this.func(); 
+        }, 100);
+    }
+};
+o.test();
+
+==================================
+函数有以下几种调用方式：作为对象方法调用、作为函数调用、作为构造函数调用、apply或call调用。
+++++++++++++++++++++++++++++
+1.作为对象方法调用
+var a = {  
+    aa : 0,  
+    bb : 0,  
+    fun : function(x,y){  
+    	console.log(this);//对象a
+        this.aa = this.aa + x;  
+        this.bb = this.bb + y;  
+    }  
+};  
+var aa = 1;  
+var b = {  
+    aa:0,  
+    bb:0,  
+    fun : function(){
+    	console.log(this);//对象b
+    	return this.aa;
+    }  
+}     
+a.fun(3,2);  
+document.write(a.aa);//3，this指向对象本身  
+document.write(b.fun());//0,this指向对象本身  
+(function(aa){//注意传入的是函数，而不是函数执行的结果  
+    var c = aa(); //在此处需要用到aa函数，将会在此处跳转到b对象的fun方法，但是由于是在此处调用方法，
+    			  //所以this指向此处的调用者window
+    console.log(this); //window
+    document.write(c);//1 , 由于fun在该处执行，导致this不再指向对象本身，而是这里的window  
+})(b.fun); 
++++++++++++++++++++++++++++
+2.函数调用
+函数也可以直接被调用，这个时候this被绑定到了全局对象。
+var point = {   
+ x : 0,   
+ y : 0,   
+ moveTo : function(x, y) {
+	 console.log(this);//指向对象
+      var that = this;   
+     // 内部函数  
+     var moveX = function(x) {
+		 console.log(this);//指向window
+		 console.log(that);//指向对象
+     that.x = x;   
+     };   
+     // 内部函数  
+     var moveY = function(y) {   
+     that.y = y;   
+     }   
+     moveX(x);   
+     moveY(y);   
+     }   
+ };   
+ point.moveTo(1, 1); 
++++++++++++++++++++++++++++++
+3.构造函数调用
+在javascript中自己创建构造函数时可以利用this来指向新创建的对象上。这样就可以避免函数中的this指向全局了。
+[html] view plain copy
+var x = 2;  
+　function test(){  
+　　　this.x = 1;  
+　}  
+　var o = new test();  
+　alert(x); //2  
++++++++++++++++++++++++++++++
+4.apply或call调用
+这两个方法可以切换函数执行的上下文环境，也就是改变this绑定的对象。apply和call比较类似，区别在于传入参数时一个要求是数组，一个要求是分开传入。所以我们以apply为例：
+var name = "window";  
+      
+var someone = {  
+    name: "Bob",  
+    showName: function(){  
+        alert(this.name);  
+    }  
+};  
+  
+var other = {  
+    name: "Tom"  
+};     
+   
+someone.showName();     //Bob  
+someone.showName.apply();    //window  
+someone.showName.apply(other);    //Tom  
+================================================
+ES6中的箭头函数的 this始终指向函数定义时的 this，而非执行时。
