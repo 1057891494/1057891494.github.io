@@ -327,3 +327,572 @@ const doSomething = (function () {
 （2）不可以当作构造函数，也就是说，不可以使用new命令，否则会抛出一个错误。
 （3）不可以使用arguments对象，该对象在函数体内不存在。如果要用，可以用 rest 参数代替。
 （4）不可以使用yield命令，因此箭头函数不能用作 Generator 函数。
+
+this指向的固定化，并不是因为箭头函数内部有绑定this的机制，实际原因是箭头函数根本没有自己的this，导致内部的this就是外层代码块的this。正是因为它没有this，所以也就不能用作构造函数。
+
+请问下面的代码之中有几个this？
+
+function foo() {
+  return () => {
+    return () => {
+      return () => {
+        console.log('id:', this.id);
+      };
+    };
+  };
+}
+var f = foo.call({id: 1});
+
+var t1 = f.call({id: 2})()(); // id: 1
+var t2 = f().call({id: 3})(); // id: 1
+var t3 = f()().call({id: 4}); // id: 1
+
+
+上面代码之中，只有一个this，就是函数foo的this，所以t1、t2、t3都输出同样的结果。因为所有的内层函数都是箭头函数，都没有自己的this，它们的this其实都是最外层foo函数的this。
+
+由于箭头函数没有自己的this，所以当然也就不能用call()、apply()、bind()这些方法去改变this的指向。
+
+/**********************************************************/
+let birth = '2000/01/01';
+const Person = {
+  name: '张三',
+  //等同于birth: birth
+  birth,
+  // 等同于hello: function ()...
+  hello() { console.log('我的名字是', this.name); }
+};
++++++++++++++++++++++++++++
+var f=(x,y)=>({x,y});
+可以方便的返回对象
+======================================================
+ES6 一共有5种方法可以遍历对象的属性。
+
+（1）for...in
+
+for...in循环遍历对象自身的和继承的可枚举属性（不含 Symbol 属性）。
+
+（2）Object.keys(obj)
+
+Object.keys返回一个数组，包括对象自身的（不含继承的）所有可枚举属性（不含 Symbol 属性）。
+
+（3）Object.getOwnPropertyNames(obj)
+
+Object.getOwnPropertyNames返回一个数组，包含对象自身的所有属性（不含 Symbol 属性，但是包括不可枚举属性）。
+
+（4）Object.getOwnPropertySymbols(obj)
+
+Object.getOwnPropertySymbols返回一个数组，包含对象自身的所有 Symbol 属性。
+
+（5）Reflect.ownKeys(obj)
+
+Reflect.ownKeys返回一个数组，包含对象自身的所有属性，不管属性名是 Symbol 或字符串，也不管是否可枚举。
+
+以上的5种方法遍历对象的属性，都遵守同样的属性遍历的次序规则。
+
+首先遍历所有属性名为数值的属性，按照数字排序。
+其次遍历所有属性名为字符串的属性，按照生成时间排序。
+最后遍历所有属性名为 Symbol 值的属性，按照生成时间排序。
++++++++++++++++++++++++++++++++++++++++
+有四个操作会忽略enumerable为false的属性。
+
+for...in循环：只遍历对象自身的和继承的可枚举的属性。
+Object.keys()：返回对象自身的所有可枚举的属性的键名。
+JSON.stringify()：只串行化对象自身的可枚举的属性。
+Object.assign()： 忽略enumerable为false的属性，只拷贝对象自身的可枚举的属性。
++++++++++++++++++++++++++++++++++++++++
+Object.getOwnPropertyDescriptors方法，返回指定对象所有自身属性（非继承属性）的描述对象。
+==============================================
+ES6 引入了跟Object.keys配套的Object.values和Object.entries，作为遍历一个对象的补充手段，供for...of循环使用。
+
+let {keys, values, entries} = Object;
+let obj = { a: 1, b: 2, c: 3 };
+
+for (let key of keys(obj)) {
+  console.log(key); // 'a', 'b', 'c'
+}
+
+for (let value of values(obj)) {
+  console.log(value); // 1, 2, 3
+}
+
+for (let [key, value] of entries(obj)) {
+  console.log([key, value]); // ['a', 1], ['b', 2], ['c', 3]
+}
+/***********************************************************/
+Set
+	add(value)：添加某个值，返回Set结构本身。
+	delete(value)：删除某个值，返回一个布尔值，表示删除是否成功。
+	has(value)：返回一个布尔值，表示该值是否为Set的成员。
+	clear()：清除所有成员，没有返回值。
+
+	keys()：返回键名的遍历器
+	values()：返回键值的遍历器
+	entries()：返回键值对的遍历器
+	forEach()：使用回调函数遍历每个成员
++++++++++++++++++++++++++++++++++++++++++++++
+WeakSet 结构有以下三个方法。
+
+WeakSet.prototype.add(value)：向 WeakSet 实例添加一个新成员。
+WeakSet.prototype.delete(value)：清除 WeakSet 实例的指定成员。
+WeakSet.prototype.has(value)：返回一个布尔值，表示某个值是否在 WeakSet 实例之中。
+
+WeakSet是弱引用，内部元素随时会被垃圾回收器回收，WeakSet只能存放对象，WeakSet不能被遍历
+
+WeakSet 的一个用处，是储存 DOM 节点，而不用担心这些节点从文档移除时，会引发内存泄漏。
+/***********************************************************/
+Map
+	Object 结构提供了“字符串—值”的对应，Map结构提供了“值—值”的对应
+
+	const m = new Map();
+	const o = {p: 'Hello World'};
+
+	m.set(o, 'content')
+	m.get(o) // "content"
+
+	m.has(o) // true
+	m.delete(o) // true
+	m.has(o) // false
+	map.clear()
+	map.size // 0
+++++++++++++++++++++++++++++++++
+	const map = new Map([
+	  ['name', '张三'],
+	  ['title', 'Author']
+	]);
+
+	map.size // 2
++++++++++++++++++++++++++++++++
+	如果读取一个未知的键，则返回undefined。
+
+	new Map().get('asfddfsasadf')
+	// undefined
++++++++++++++++++++++++++++++++
+注意:   只有对同一个对象的引用，Map 结构才将其视为同一个键。这一点要非常小心。
+
+	const map = new Map();
+
+	map.set(['a'], 555);
+	map.get(['a']) // undefined
+	上面代码的set和get方法，表面是针对同一个键，但实际上这是两个值，内存地址是不一样的，因此get方法无法读取该键，返回undefined。
+
+	同理，同样的值的两个实例，在 Map 结构中被视为两个键。
+
+	const map = new Map();
+
+	const k1 = ['a'];
+	const k2 = ['a'];
+
+	map
+	.set(k1, 111)
+	.set(k2, 222);
+
+	map.get(k1) // 111
+	map.get(k2) // 222
+	上面代码中，变量k1和k2的值是一样的，但是它们在 Map 结构中被视为两个键。
++++++++++++++++++++++++++++++++
+遍历方法
+	keys()：返回键名的遍历器。
+	values()：返回键值的遍历器。
+	entries()：返回所有成员的遍历器。
+	forEach()：遍历 Map 的所有成员。
+================================================
+	1.[...myMap]，将Map转化为数组
+	2.数组转化为对象:new Map([[true, 7],[{foo: 3}, ['abc']]])
+	3.Map 转为对象:
+		function strMapToObj(strMap) {
+		  let obj = Object.create(null);
+		  for (let [k,v] of strMap) {
+		    obj[k] = v;
+		  }
+		  return obj;
+		}
+
+		const myMap = new Map()
+		  .set('yes', true)
+		  .set('no', false);
+		strMapToObj(myMap)
+		此时的Map键都应该为字符串
+	4.对象转为 Map
+		function objToStrMap(obj) {
+		  let strMap = new Map();
+		  for (let k of Object.keys(obj)) {
+		    strMap.set(k, obj[k]);
+		  }
+		  return strMap;
+		}
+
+		objToStrMap({yes: true, no: false})
+	5.Map 转为 JSON
+
+		Map 转为 JSON 要区分两种情况。一种情况是，Map 的键名都是字符串，这时可以选择转为对象 JSON。
+
+		function strMapToJson(strMap) {
+		  return JSON.stringify(strMapToObj(strMap));
+		}
+
+		let myMap = new Map().set('yes', true).set('no', false);
+		strMapToJson(myMap)
+		// '{"yes":true,"no":false}'
+		另一种情况是，Map 的键名有非字符串，这时可以选择转为数组 JSON。
+
+		function mapToArrayJson(map) {
+		  return JSON.stringify([...map]);
+		}
+
+		let myMap = new Map().set(true, 7).set({foo: 3}, ['abc']);
+		mapToArrayJson(myMap)
+		// '[[true,7],[{"foo":3},["abc"]]]'
+	6.JSON 转为 Map
+
+		JSON 转为 Map，正常情况下，所有键名都是字符串。
+
+		function jsonToStrMap(jsonStr) {
+		  return objToStrMap(JSON.parse(jsonStr));
+		}
+
+		jsonToStrMap('{"yes": true, "no": false}')
+		// Map {'yes' => true, 'no' => false}
+		但是，有一种特殊情况，整个 JSON 就是一个数组，且每个数组成员本身，又是一个有两个成员的数组。这时，它可以一一对应地转为Map。这往往是数组转为 JSON 的逆操作。
+
+		function jsonToMap(jsonStr) {
+		  return new Map(JSON.parse(jsonStr));
+		}
+
+		jsonToMap('[[true,7],[{"foo":3},["abc"]]]')
+		// Map {true => 7, Object {foo: 3} => ['abc']}
+========================================
+WeakMap
+	WeakMap只接受对象作为键名(null不可以作为键名)
+	WeakMap中如果键消失了，键值对自动消失
+
+注意，WeakMap 弱引用的只是键名，而不是键值。键值依然是正常引用。
+
+	const wm = new WeakMap();
+	let key = {};
+	let obj = {foo: 1};
+
+	wm.set(key, obj);
+	obj = null;
+	wm.get(key)
+	// Object {foo: 1}
+	上面代码中，键值obj是正常引用。所以，即使在 WeakMap 外部消除了obj的引用，WeakMap 内部的引用依然存在。
+++++++++++++++++++++++++++++++++++++++
+WeakMap没有遍历操作（即没有key()、values()和entries()方法），
+也没有size属性。二是无法清空，即不支持clear方法。
+因此，WeakMap只有四个方法可用：get()、set()、has()、delete()。
+
+WeakMap 应用的典型场合就是 DOM 节点作为键名。下面是一个例子。
+
+let myElement = document.getElementById('logo');
+let myWeakmap = new WeakMap();
+
+myWeakmap.set(myElement, {timesClicked: 0});
+
+myElement.addEventListener('click', function() {
+  let logoData = myWeakmap.get(myElement);
+  logoData.timesClicked++;
+}, false);
+/***************************************************************************/
+原生具备 Iterator 接口的数据结构如下。
+
+	Array
+	Map
+	Set
+	String
+	TypedArray
+	函数的 arguments 对象
+	NodeList 对象
+
+	下面的例子是数组的Symbol.iterator属性。
+
+	let arr = ['a', 'b', 'c'];
+	let iter = arr[Symbol.iterator]();
+	iter.next() // { value: 'a', done: false }
+	iter.next() // { value: 'b', done: false }
+	iter.next() // { value: 'c', done: false }
+	iter.next() // { value: undefined, done: true }
+
+以上对象又有一个Symbol.iterator属性，他是一个方法，返回该对象的遍历器接口。
+===============================================
+for...of循环可以使用的范围包括数组、Set 和 Map 结构、某些类似数组的对象（比如arguments对象、DOM NodeList 对象）、后文的 Generator 对象，以及字符串。
+
+使用for...of遍历目标对象的值，for...in只能提供键（下标）
+var arr = ['a', 'b', 'c', 'd'];
+
+for (let a in arr) {                      for (let a in arr) {
+  console.log(a); // 0 1 2 3     =>			console.log(arr[a]); // 
+}										  }
+
+for (let a of arr) {
+  console.log(a); // a b c d
+}
+对于普通对象不能直接使用for of,但可以使用for in便利出键名
+可以利用对象.keys()，.entries()，.values()进行遍历
+=============================================
+for...of遍历Set
+	var engines = new Set(["Gecko", "Trident", "Webkit", "Webkit"]);
+	for (var e of engines) {
+	  console.log(e);
+	}
+	// Gecko
+	// Trident
+	// Webkit
+
+	var es6 = new Map();
+	es6.set("edition", 6);
+	es6.set("committee", "TC39");
+	es6.set("standard", "ECMA-262");
+	for (var [name, value] of es6) {
+	  console.log(name + ": " + value);
+	}
+	// edition: 6
+	// committee: TC39
+	// standard: ECMA-262
++++++++++++++++++++++++++++++++
+for...of遍历Map
+	let map = new Map().set('a', 1).set('b', 2);
+	for (let pair of map) {
+	  console.log(pair);
+	}
+	// ['a', 1]
+	// ['b', 2]
+
+	for (let [key, value] of map) {
+	  console.log(key + ' : ' + value);
+	}
+	// a : 1
+	// b : 2
+======================================
+ES6的数组、Set、Map 都部署了以下三个方法，调用后都返回遍历器对象。
+
+entries() 返回一个遍历器对象，用来遍历[键名, 键值]组成的数组。对于数组，键名就是索引值；对于 Set，键名与键值相同。Map 结构的 Iterator 接口，默认就是调用entries方法。
+keys() 返回一个遍历器对象，用来遍历所有的键名。
+values() 返回一个遍历器对象，用来遍历所有的键值。
+/*************************************************************************/
+Generator   内部可以包含多个状态，返回值为iterator
+	function* helloWorldGenerator() {
+		var a=0;
+		a=1;
+	    yield a;
+		a=2;
+	    yield a;
+		a=3;
+	    return a;
+		a=4;
+	}
+	var hw = helloWorldGenerator();
+	console.log(hw.next());//{value: 1, done: false}
+	console.log(hw.next());//{value: 2, done: false}
+	console.log(hw.next());//{value: 3, done: false}
+	console.log(hw.next());//{value: undefined, done: true}
+//利用这个特点可以返回一系列的结果（注意function后面带*号）
+=======================================================
+var myIterable = {};
+myIterable[Symbol.iterator] = function* () {
+  yield 1;
+  yield 2;
+  yield 3;
+};
+
+[...myIterable] // [1, 2, 3]
+利用以上方法可以使普通对象能够被遍历和...运算符
++++++++++++++++++++++++++++++++++
+function* gen(){
+  // some code
+}
+
+var g = gen();
+
+g[Symbol.iterator]() === g
+// true
+====================================
+function* foo(x) {
+  var y = 2 * (yield (x + 1));
+  var z = yield (y / 3);
+  return (x + y + z);
+}
+
+var a = foo(5);
+a.next() // Object{value:6, done:false}
+a.next() // Object{value:NaN, done:false}
+a.next() // Object{value:NaN, done:true}
+
+var b = foo(5);
+b.next() // { value:6, done:false }
+b.next(12) // { value:8, done:false }
+b.next(13) // { value:42, done:true }
+通过给next传值，将yield的值改变（注意不是yield等号左边的值），从而改变函数运行结果
++++++++++++++++++++++++++++++++++++++++
+function *foo() {
+  yield 1;
+  yield 2;
+  yield 3;
+  yield 4;
+  yield 5;
+  return 6;
+}
+
+for (let v of foo()) {
+  console.log(v);
+}
+// 1 2 3 4 5
+结果不会输出6，因为6的done为true
+++++++++++++++++++++++++++++++++++++++
+function* objectEntries(obj) {
+  let propKeys = Reflect.ownKeys(obj);
+
+  for (let propKey of propKeys) {
+    yield [propKey, obj[propKey]];
+  }
+}
+
+let jane = { first: 'Jane', last: 'Doe' };
+
+for (let [key, value] of objectEntries(jane)) {
+  console.log(`${key}: ${value}`);
+}
+// first: Jane
+// last: Doe
+通过给普通对象添加接口，使得它可以被for of遍历
+============================================
+yield* 用来在generator内部遍历其他generator返回的iterator
+	let delegatedIterator = (function* () {
+	  yield 'Hello!';
+	  yield 'Bye!';
+	}());
+
+	let delegatingIterator = (function* () {
+	  yield 'Greetings!';
+	  yield* delegatedIterator;
+	  yield 'Ok, bye.';
+	}());
+
+	for(let value of delegatingIterator) {
+	  console.log(value);
+	}
+	// "Greetings!
+	// "Hello!"
+	// "Bye!"
+	// "Ok, bye."
++++++++++++++++++++++++++++
+generator return
+	yield
+	throw 抛出一个错误，内部和外部都能接收到这个错误，并自动执行下一步yield
+	return 如果return（）:{ value: undefined, done: true },直接结束遍历
+		   如果return（“aaa”）：{ value: aaa, done: true },直接结束遍历
+++++++++++++++++++++++++
+如果 Generator 函数内部有try...finally代码块，那么return方法会推迟到finally代码块执行完再执行。
+	function* numbers () {
+	  yield 1;
+	  try {
+	    yield 2;
+	    yield 3;
+	  } finally {
+	    yield 4;
+	    yield 5;
+	  }
+	  yield 6;
+	}
+	var g = numbers();
+	g.next() // { value: 1, done: false }
+	g.next() // { value: 2, done: false }
+	g.return(7) // { value: 4, done: false }
+	g.next() // { value: 5, done: false }
+	g.next() // { value: 7, done: true }
+===================================================
+yield*命令可以很方便地取出嵌套数组的所有成员。
+
+function* iterTree(tree) {
+  if (Array.isArray(tree)) {
+    for(let i=0; i < tree.length; i++) {
+      yield* iterTree(tree[i]);
+    }
+  } else {
+    yield tree;
+  }
+}
+
+const tree = [ 'a', ['b', 'c'], ['d', 'e'] ];
+
+for(let x of iterTree(tree)) {
+  console.log(x);
+}
+// a
+// b
+// c
+// d
+// e
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+下面是一个稍微复杂的例子，使用yield*语句遍历完全二叉树。
+
+// 下面是二叉树的构造函数，
+// 三个参数分别是左树、当前节点和右树
+function Tree(left, label, right) {
+  this.left = left;
+  this.label = label;
+  this.right = right;
+}
+
+// 下面是中序（inorder）遍历函数。
+// 由于返回的是一个遍历器，所以要用generator函数。
+// 函数体内采用递归算法，所以左树和右树要用yield*遍历
+function* inorder(t) {
+  if (t) {
+    yield* inorder(t.left);
+    yield t.label;
+    yield* inorder(t.right);
+  }
+}
+
+// 下面生成二叉树
+function make(array) {
+  // 判断是否为叶节点
+  if (array.length == 1) return new Tree(null, array[0], null);
+  return new Tree(make(array[0]), array[1], make(array[2]));
+}
+let tree = make([[['a'], 'b', ['c']], 'd', [['e'], 'f', ['g']]]);
+
+// 遍历二叉树
+var result = [];
+for (let node of inorder(tree)) {
+  result.push(node);
+}
+
+result
+// ['a', 'b', 'c', 'd', 'e', 'f', 'g']
+/**********************************************************/
+forEach方法：
+	var a=[0,1,2,3,4];
+	a.forEach(function(value,index,arr){
+		console.log(value);
+		console.log(index);
+		console.log(arr);
+	});
+	value为下标对应的值，index为下标，arr为数组a
+/**********************************************************/
+(await)
+async函数返回的是一个Promise对象，其状态须有内部所有await执行完才会变化
+async内部throw错误会变为rejected，并终止往下执行
+await后面的参数是一个Promise对象，如果不是，会被转成一个promise对象，状态为resolve
+程序执行时，一旦遇到await就会先返回，等到异步操作完成，再接着执行函数体内后面的语句。
+++++++++++++++++++++++++
+(then)
+Promise创建完就会立即执行
+Promise有一个参数，该参数是一个方法，方法有两个参数（resolve和reject），这两个参数由javaScript注入
+then方法指定回掉函数
+then方法return的值将作为下一个then方法的参数
+++++++++++++++++++++++++
+（yield yield*）
+Generator放回一个遍历器对象
+generator声明方式：function* FnName(){}
+generator return的值将被包装成一个对象中的value的值{value：（此处为return的值），done：true}
+generator想要达到async连续执行的效果，则必须额外写一个自动执行器（一个方法）
+/***************************************************************************/
+array.map(function(currentValue,index,arr), thisValue)
+	currentValue		必须。当前元素的值
+	index				可选。当期元素的索引值
+	arr					可选。当期元素属于的数组对象
+	thisValue			可选。对象作为该执行回调时使用，传递给函数，用作 "this" 的值。
+						如果省略了 thisValue ，"this" 的值为 "undefined"
+						(个人理解，thisValue用来作为被指向的对象)
+/**************************************************************************/
