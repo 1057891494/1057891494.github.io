@@ -74,37 +74,37 @@ p {
         <p>本人新手，在学习阮一峰大师的ES6，看到这里：</br>
             async function logInOrder(urls) {</br>
             </br>
-            &#09;// 并发读取远程URL </br>
-            &#09;const textPromises = urls.map(async url => { </br>
-            &#09;&#09;const response = await fetch(url);</br>
-            &#09;&#09;return response.text();</br>
-            &#09;});</br>
+            &nbsp;&nbsp;// 并发读取远程URL </br>
+            &nbsp;&nbsp;const textPromises = urls.map(async url => { </br>
+            &nbsp;&nbsp;&nbsp;&nbsp;const response = await fetch(url);</br>
+            &nbsp;&nbsp;&nbsp;&nbsp;return response.text();</br>
+            &nbsp;&nbsp;});</br>
             </br>
-            &#09;// 按次序输出 </br>
-            &#09;for (const textPromise of textPromises) {</br>
-            &#09;&#09;console.log(await textPromise); </br>
-            &#09;} </br>
+            &nbsp;&nbsp;// 按次序输出 </br>
+            &nbsp;&nbsp;for (const textPromise of textPromises) {</br>
+            &nbsp;&nbsp;&nbsp;&nbsp;console.log(await textPromise); </br>
+            &nbsp;&nbsp;} </br>
             } </br>
             上面代码中，虽然map方法的参数是async函数，但它是并发执行的，因为只有async函数内部是继发执行，外部不受影响。后面的for..of循环内部使用了await，因此实现了按顺序输出。</br>
             上面代码使用fetch方法，同时远程读取一组 URL。每个fetch操作都返回一个 Promise 对象，放入textPromises数组。</br>
             以上摘自阅读内容，根据大师的话“只有async函数内部是继发执行”，我有两种理解：1：map()函数内的方法是并发执行的。2：map()函数中的async函数之间是并发执行的。</br>为了验证，我自己写了一个方法，用计时模拟异步事件：</br>
             [1,2,3,4,5].map(</br>
             </br>
-            &#09;(value)=>{</br>
-            &#09;&#09;var date=new Date();</br>
-            &#09;&#09;while(new Date().getTime()&lt;date.getTime()+6000-value*1000){}</br>
-            &#09;&#09;console.log(value);</br>
-            &#09;}</br>
+            &nbsp;&nbsp;(value)=>{</br>
+            &nbsp;&nbsp;&nbsp;&nbsp;var date=new Date();</br>
+            &nbsp;&nbsp;&nbsp;&nbsp;while(new Date().getTime()&lt;date.getTime()+6000-value*1000){}</br>
+            &nbsp;&nbsp;&nbsp;&nbsp;;console.log(value);</br>
+            &nbsp;&nbsp;}</br>
             );</br>
             结果是按顺序输出1，2，3，4，5.</br>
             于是我怀疑是async函数之间是并发的：</br>
             [1,2,3,4,5].map(</br>
             </br>
-            &#09;async (value)=>{</br>
-            &#09;&#09;var date=new Date();</br>
-            &#09;&#09;while(new Date().getTime()&lt;date.getTime()+6000-value*1000){}</br>
-            &#09;&#09;console.log(value);</br>
-            &#09;}</br>
+            &nbsp;&nbsp;async (value)=>{</br>
+            &nbsp;&nbsp;&nbsp;&nbsp;var date=new Date();</br>
+            &nbsp;&nbsp;&nbsp;&nbsp;while(new Date().getTime()&lt;date.getTime()+6000-value*1000){}</br>
+            &nbsp;&nbsp;&nbsp;&nbsp;console.log(value);</br>
+            &nbsp;&nbsp;}</br>
             );</br>
             结果依然是1，2，3，4，5.</br>
             以上两种情况并没有实现并发（5在1之前输出，我试过增加while的循环时间，但是没有效果）</br>
