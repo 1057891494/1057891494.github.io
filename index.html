@@ -71,7 +71,7 @@ p {
     </div>
     <div>
         <span class="Que">Question:</span>
-        <p>本人新手，在学习阮一峰大师的ES6，看到这里：</br>
+        <p><textarea>本人新手，在学习阮一峰大师的ES6，看到这里：</br>
             async function logInOrder(urls) {</br>
             </br>
             &#09;// 并发读取远程URL </br>
@@ -92,7 +92,7 @@ p {
             </br>
             &#09;(value)=>{</br>
             &#09;&#09;var date=new Date();</br>
-            &#09;&#09;while(new Date().getTime()<date.getTime()+6000-value*1000){}</br>
+            &#09;&#09;while(new Date().getTime()&lt;date.getTime()+6000-value*1000){}</br>
             &#09;&#09;console.log(value);</br>
             &#09;}</br>
             );</br>
@@ -102,13 +102,13 @@ p {
             </br>
             &#09;async (value)=>{</br>
             &#09;&#09;var date=new Date();</br>
-            &#09;&#09;while(new Date().getTime()<date.getTime()+6000-value*1000){}</br>
+            &#09;&#09;while(new Date().getTime()&lt;date.getTime()+6000-value*1000){}</br>
             &#09;&#09;console.log(value);</br>
             &#09;}</br>
             );</br>
             结果依然是1，2，3，4，5.</br>
             以上两种情况并没有实现并发（5在1之前输出，我试过增加while的循环时间，但是没有效果）</br>
-            于是我想问；1.map()是不是一个并发执行的函数？2.async函数之间是并发的吗？3.我的代码有什么问题吗？</p>
+            于是我想问；1.map()是不是一个并发执行的函数？2.async函数之间是并发的吗？3.我的代码有什么问题吗？</textarea></p>
     </div>
     <div>
         <span class="Ans">Answer:</span>
