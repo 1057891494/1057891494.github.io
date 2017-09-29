@@ -878,8 +878,6 @@ await后面的参数是一个Promise对象，如果不是，会被转成一个pr
 ++++++++++++++++++++++++
 (then)
 Promise创建完就会立即执行
-Promise有一个参数，该参数是一个方法，方法有两个参数（resolve和reject），这两个参数由javaScript注入
-then方法指定回掉函数
 then方法return的值将作为下一个then方法的参数
 ++++++++++++++++++++++++
 （yield yield*）
@@ -895,4 +893,10 @@ array.map(function(currentValue,index,arr), thisValue)
 	thisValue			可选。对象作为该执行回调时使用，传递给函数，用作 "this" 的值。
 						如果省略了 thisValue ，"this" 的值为 "undefined"
 						(个人理解，thisValue用来作为被指向的对象)
+
+•map的回调函数中支持return返回值；return的是啥，相当于把数组中的这一项变为啥（并不影响原来的数组，只是相当于把原数组克隆一份，把克隆的这一份的数组中的对应项改变了）；
+
+•不管是forEach还是map 都支持第二个参数值，第二个参数的意思是把匿名回调函数中的this进行修改。
 /**************************************************************************/
+
+

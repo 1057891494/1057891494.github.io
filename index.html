@@ -8,19 +8,19 @@
     <title>笔记心得</title>
 </head>
 <style>
-    .Que {
-        font-size: 25px;
-        background-color: #E67C7C;
-    }
+.Que {
+    font-size: 25px;
+    background-color: #E67C7C;
+}
 
-    .Ans {
-        font-size: 25px;
-        background-color: #9EE284;
-    }
+.Ans {
+    font-size: 25px;
+    background-color: #9EE284;
+}
 
-    p {
-        font-size: 18px;
-    }
+p {
+    font-size: 18px;
+}
 </style>
 
 <body>
@@ -68,6 +68,26 @@
     <div>
         <span class="Ans">Answer:</span>
         <p>无论在控制器中还是指令中的controller中，都需要为其注入实例。</p>
+    </div>
+    <div>
+        <span class="Que">Question:</span>
+        <p>async function logInOrder(urls) {</br> // 并发读取远程URL </br>const textPromises = urls.map(</br>async url => { </br>const response = await fetch(url);</br> return response.text(); });</br> // 按次序输出 </br>for (const textPromise of textPromises) {</br> console.log(await textPromise); </br>} </br>} </br>上面代码中，虽然map方法的参数是async函数，但它是并发执行的，因为只有async函数内部是继发执行，外部不受影响。后面的for..of循环内部使用了await，因此实现了按顺序输出。
+        </p>
+        <p>个人对以上的理解：</br>一调用async函数就立即返回一个Promise对象，利用这点，可以将async函数放在循环中并在await后面添加异步执行函数实现并发操作，同时可以将async函数返回的值存放在数组中，通过遍历实现顺序输出</br>模拟以上情况：</br>[1,2,3,4,5].map(async (value)=>{</br>
+            var date=new Date();</br>
+            while(new Date().getTime()
+            <date.getTime()+6000-value*1000){}</br>
+                console.log(value);</br>
+                debugger;</br>
+                var s=await new Promise((resolve,reject)=>{</br>
+                resolve(value);</br>
+                });</br>
+                </br>
+                console.log(s);</br>
+                });</br>但是并没有实现54321输出（5的时间最短）</p>
+    </div>
+    <div>
+        <span class="Ans">Answer:</span>
     </div>
 </body>
 
