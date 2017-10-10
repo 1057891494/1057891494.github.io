@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style type="text/css">
+        .box{width: 100%;height: 300px;position: relative;}
+        .box ul{margin-left: -600px;position: relative;width: 1200px;left: 50%;height: 300px;list-style: none;}
+        .box ul li{position: absolute;width: 751px;height: 300px;}
+        img{width: 751px;height: 300px;}
+        .p1{z-index: 1;transform: scale(0.81);left: -71px;transition: all 0.5s}
+        .p2{z-index: 2;transform: scale(1);left: 50%;margin-left: -375px;transition: all 0.5s}
+        .p3{z-index: 1;transform: scale(0.81);right: -71px;transition: all 0.5s}
+        .p4{display: none;}
+        .p5{display: none;}
+        .p6{display: none;}
+        .p7{display: none;}
+        .box .left{position: absolute;z-index: 2;width: 60px;height: 120px;vertical-align: middle;left: 50%;margin-left: -600px;background-color: green;opacity: 0.3;top: 25%;text-align: center;line-height: 120px;font-size: 50px;color: #fff;}
+        .box .right{position: absolute;z-index: 2;width: 60px;height: 120px;vertical-align: middle;left: 50%;margin-left: 580px;background-color: green;opacity: 0.3;top: 25%;text-align: center;line-height: 120px;font-size: 50px;color: #fff;}
+        .box .left:hover{opacity: 0.8;}
+        .box .right:hover{opacity: 0.8;}
+        .littlebth{margin: 0 auto;width: fit-content;height: 32px;line-height: 32px;list-style: none;}
+        .littlebth li{width: 20px;height: 5px;border-radius: 5px;background-color: #ff7800;display: inline-block;}
+        .littlebth li:first-child{background-color: blue;}
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <ul>
+            <li class="p1"><a href="#"><img src="img/1.png"/></a></li>
+            <li class="p2"><a href="#"><img src="img/2.png"/></a></li>
+            <li class="p3"><a href="www.baidu.com"><img src="img/3.png"/></a></li>
+            <li class="p4"><a href="#"><img src="img/44.jpg"/></a></li>
+            <li class="p5"><a href="#"><img src="img/55.jpg"/></a></li>
+            <li class="p6"><a href="#"><img src="img/66.jpg"/></a></li>
+            <li class="p7"><a href="#"><img src="img/77.jpg"/></a></li>
+        </ul>
+        <div class="left"><</div>
+        <div class='right'>></div>
+    </div>
+    <ul class="littlebth">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+    <script type="text/javascript" src="jquery-1.11.1.min.js"></script>
+    <script>
+        var li1=$(".box ul li");
+        var li2=$(".littlebth li");
+        var array=['p1','p2','p3','p4','p5','p6','p7'];
+        index=0;
+        $('.left').bind("click",pre);
+        $(document).on("click", ".p1", function() {
+            pre();
+            return false;
+        });
+        $('.right').bind("click",next);
+        $(document).on("click", ".p3", function() {
+            next();
+            return false;
+        });
+        li2.each(function(){
+            $(this).bind('click',function(){
+                var nowIndex=$(this).index();
+                var bt=nowIndex-index;
+                if(bt==0){return;}
+                li2.each(function(index,ele){
+                    $(ele).css("background-color","#ff7800");
+                });
+                $(li2[nowIndex]).css("background-color","blue");
+                if(bt>0){
+                    var tempArray=array.splice(array.length-bt,bt);
+                    array=$.merge(tempArray,array);
+                }else{
+                    var tempArray=array.splice(0,-bt);
+                    array=$.merge(array,tempArray);
+                }
+                index=nowIndex;
+                li1.each(function(i,e){
+                    $(e).removeClass().addClass(array[i]);
+                });
+                clearInterval(timer);
+                timer=setInterval(next,3000);
+            });
+
+        });
+        function pre(){
+            index--;
+            if(index<0){
+                index=6;
+            }
+            var temp=array.shift();
+            array.push(temp);
+            li1.each(function(i,e){
+                $(e).removeClass().addClass(array[i]);
+            });
+            li2.each(function(index,ele){
+                $(ele).css("background-color","#ff7800");
+            });
+            $(li2[index]).css("background-color","blue");
+        }
+        function next(){
+            index++;
+            if(index>6){
+                index=0;
+            }
+            var temp=array.pop();
+            array.unshift(temp);
+            li1.each(function(i,e){
+                $(e).removeClass().addClass(array[i]);
+            });
+            li2.each(function(index,ele){
+                $(ele).css("background-color","#ff7800");
+            });
+            $(li2[index]).css("background-color","blue");
+        }
+        var timer=setInterval(next,3000);
+        $('.box').bind("mouseover",function(){
+            clearInterval(timer);
+        });
+        $('.box').bind("mouseleave",function(){
+            timer=setInterval(next,3000);
+        });
+    </script>
+</body>
+
+</html>
