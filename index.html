@@ -71,6 +71,14 @@ p {
     </div>
     <div>
         <span class="Que">Question:</span>
+        <p>字符串反转</p>
+    </div>
+    <div>
+        <span class="Ans">Answer:</span>
+        <p>message.split('').reverse().join('')</p>
+    </div>
+    <div>
+        <span class="Que">Question:</span>
         <p>本人新手，在学习阮一峰大师的ES6，看到这里：</br>
             async function logInOrder(urls) {</br>
             </br>
@@ -188,9 +196,9 @@ p {
 1.event.stopPropagation(); </br>
 </br>
         $(function() {</br>
-            $("#hr_three").click(function(event) {</br>
-                event.stopPropagation();</br>
-            });</br>
+            &nbsp;&nbsp;$("#hr_three").click(function(event) {</br>
+               &nbsp;&nbsp;&nbsp;&nbsp; event.stopPropagation();</br>
+           &nbsp;&nbsp; });</br>
         });</br>
    </br>    
 再点击“点击我”，会弹出：我是最里层，然后链接到百度</br>
@@ -203,16 +211,16 @@ p {
  </br>
 由此可以看出：</br>
 1.event.stopPropagation(); </br>
-   事件处理过程中，阻止了事件冒泡，但不会阻击默认行为（它就执行了超链接的跳转）</br>
+   &nbsp;&nbsp;事件处理过程中，阻止了事件冒泡，但不会阻击默认行为（它就执行了超链接的跳转）</br>
  </br>
  
 2.return false;</br>
-   事件处理过程中，阻止了事件冒泡，也阻止了默认行为（比如刚才它就没有执行超链接的跳转）</br>
+   &nbsp;&nbsp;事件处理过程中，阻止了事件冒泡，也阻止了默认行为（比如刚才它就没有执行超链接的跳转）</br>
  
  </br>
 还有一种有冒泡有关的：</br>
 3.event.preventDefault(); </br>
-   如果把它放在头部A标签的click事件中，点击“点击我”。</br>
+   &nbsp;&nbsp;如果把它放在头部A标签的click事件中，点击“点击我”。</br>
    会发现它依次弹出：我是最里层----&gt;我是中间层----&gt;我是最外层，但最后却没有跳转到百度</br>
  </br>
     它的作用是：事件处理过程中，不阻击事件冒泡，但阻击默认行为（它只执行所有弹框，却没有执行超链接跳转）</br>
