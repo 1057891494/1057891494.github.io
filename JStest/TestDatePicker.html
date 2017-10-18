@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- <style type="text/css" href="bootstrap.css"></style> -->
+    <style type="text/css">
+    .TopBar {
+        width: 200px;
+        height: 25px;
+        line-height: 25px;
+        text-align: center;
+    }
+
+    .preMonth {
+        float: left;
+    }
+
+    .checkedMonth {
+        height: 100%;
+        width: fit-content;
+    }
+
+    .nextMonth {
+        float: right;
+    }
+
+    .clearfloat {
+        clear: both;
+    }
+
+    table {
+        width: 200px;
+        text-align: center;
+    }
+
+    tr {
+        height: 22.4px;
+        width: 14.28%;
+    }
+
+    td:hover {
+        background-color: #69a2db;
+    }
+
+    .preMonth:hover {
+        background-color: #69a2db;
+    }
+
+    .nextMonth:hover {
+        background-color: #69a2db;
+    }
+
+    .dateSelecter {
+        width: fit-content;
+        position: absolute;
+    }
+
+    .dateSelected {
+        background-color: #e5e6a2;
+    }
+    </style>
+</head>
+
+<body>
+    <input type="text" name="" id="datePickerShower" readonly="readonly">
+    <div id="dateSelecter" class="dateSelecter">
+        <div class="TopBar">
+            <span class="preMonth">上一月</span>
+            <span class="checkedMonth"></span>
+            <span class='nextMonth'>下一月</span>
+            <span class="clearfloat"></span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>日</th>
+                    <th>一</th>
+                    <th>二</th>
+                    <th>三</th>
+                    <th>四</th>
+                    <th>五</th>
+                    <th>六</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <script type="text/javascript" src="jquery-1.11.1.min.js"></script>
+    <script type="text/javascript">
+    var todayDate = new Date();
+    var toYear = todayDate.getFullYear();
+    var toMonth = todayDate.getMonth() + 1;
+    var datePickerShower = $("#datePickerShower");
+    var dateSelecter = $("#dateSelecter");
+    var toDate = todayDate.getDate();
+    var now = {
+        //保存今天
+        "toYear": toYear,
+        "toMonth": toMonth,
+        "toDate": toDate
+    };
+    dateSelecter.hide(); //一开始隐藏
+    datePickerShower.on("click", function(e) {
+        //点击input则显示下方日期表
+        var target = e.targer || window.event.srcElement;
+        var $this = $(target);
+        var position = getPosition(e);
+        dateSelecter.css("left", position.left + "px");
+        dateSelecter.css("top", position.top + "px");
+        showThisMonth(toYear, toMonth);
+    });
+    $(document).on("click", function(e) {
+        var target = e.targer || window.event.srcElement;
+        if ($(target).parents("#dateSelecter").length <= 0 && $(target).context.id != "datePickerShower") {
+            dateSelecter.hide();
+        }
+    })
+    var Months = [31, false, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    //showThisMonth(toYear,toMonth);
+    function getSecondMonthDays(year) {
+        //计算二月有几天
+        if (year % 400 == 0 || (year % 100 != 0 && year % 4 == 0)) {
+            return 29;
+        } else {
+            return 28;
+        }
+    }
+
+    function getPosition(e) {
+        var target = e.targer || window.event.srcElement;
+        var $this = $(target);
+        var left = 0;
+        var top = 0;
+        var obj = $this[0];
+        var height = obj.offsetHeight;
+        top = obj.offsetTop;
+        left = obj.offsetLeft;
+        while (obj = obj.offsetParent) {
+            top += obj.offsetTop;
+            left += obj.offsetLeft;
+        }
+        $this.left = left;
+        $this.top = top + height;
+        return $this;
+    }
+
+    function getWeeks(year, month) {
+        //计算这个月有几周
+        return Math.ceil((getThisMonthDays(year, month) + getFirstDayOfMonth(year, month)) / 7);
+    }
+
+    function getThisMonthDays(year, month) {
+        //计算这个月天数
+        return Months[month - 1] == false ? getSecondMonthDays(year) : Months[month - 1];
+    }
+
+    function getThisDay(year, month, date) {
+        //计算这是周几
+        var day = new Date(year, month - 1, date).getDay();
+        switch (day) {
+            case 0:
+                return "周日";
+                break;
+            case 1:
+                return "周一";
+                break;
+            case 2:
+                return "周二";
+                break;
+            case 3:
+                return "周三";
+                break;
+            case 4:
+                return "周四";
+                break;
+            case 5:
+                return "周五";
+                break;
+            case 6:
+                return "周六";
+                break;
+        }
+    }
+
+    function getFirstDayOfMonth(year, month) {
+        //计算这个月的第一天是周几
+        return new Date(year, month - 1, 1).getDay();
+    }
+
+    function showThisMonth(year, month) {
+        $('.checkedMonth').text(year + "-" + ((month + "").length == 1 ? ("0" + month) : month));
+        var firstDayOfMonth = getFirstDayOfMonth(year, month);
+        var weeks = getWeeks(year, month);
+        var days = getThisMonthDays(year, month);
+        var tbody = $("tbody");
+        tbody.empty();
+        for (var i = 0; i < weeks; i++) {
+            tbody.append('<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>');
+        }
+        var tds = $("td");
+        var yearValue = now.toYear; //被选中的年，默认今年
+        var monthValue = now.toMonth; //被选中的月，默认本月
+        var dateValue = now.toDate; //被选中的日期，默认今天
+        var date = datePickerShower.val();
+        if (date) {
+            dateValue = parseInt(date.substring(8, 10));
+            yearValue = parseInt(date.substring(0, 4));
+            monthValue = parseInt(date.substring(5, 7));
+        }
+        var count = 1; //用来添加到td的日期号码
+        for (var i = 0, l = tds.length; i < l; i++) {
+            var tdsi = $(tds[i]);
+            if (i >= firstDayOfMonth && i < (firstDayOfMonth + days)) {
+                if (count == dateValue && month == monthValue && year == yearValue) {
+                    tdsi.addClass("dateSelected");
+                }
+                tdsi.text(count++);
+                tdsi.on('click', function(e) {
+                    pickDate(year, month, e);
+                });
+            } else {
+                tdsi.text('');
+            }
+        }
+        dateSelecter.show();
+    }
+
+    function pickDate(year, month, e) {
+        //点击日期后回显至input框
+        var target = e.target || window.event.srcElement;
+        var date = $(target).text();
+        if (date) {
+            datePickerShower.val(year + "-" + ((month + "").length == 1 ? ("0" + month) : month) + "-" + ((date + "").length == 1 ? ("0" + date) : date) + "/" + getThisDay(year, month, date));
+        }
+        dateSelecter.hide();
+    }
+
+    function preMonth() {
+        //上一个月
+        toMonth--;
+        if (toMonth < 1) {
+            toMonth = 12;
+            toYear--;
+        }
+        showThisMonth(toYear, toMonth);
+    }
+
+    function nextMonth() {
+        toMonth++;
+        if (toMonth > 12) {
+            toMonth = 1;
+            toYear++;
+        }
+        showThisMonth(toYear, toMonth);
+    }
+    $('.preMonth').on('click', preMonth);
+    $('.nextMonth').on('click', nextMonth);
+    </script>
+</body>
+
+</html>
