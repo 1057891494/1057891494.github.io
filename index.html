@@ -152,6 +152,34 @@ p {
     </div>
     <div>
         <span class="Que">Question:</span>
+        <p>css中 border-radius: 100px / 50px; 写法是什么意思？</p>
+    </div>
+    <div>
+        <span class="Ans">Answer:</span>
+        <p>CSS里面em是什么鬼</p>
+    </div>
+    <div>
+        <span class="Que">Question:</span>
+        <p>em表示倍数1em即一倍,一般body默认font-size:16px,所以1em=16px;可以更改body中font-size的值，从而改变1em的大小</p>
+    </div>
+    <div>
+        <span class="Ans">Answer:</span>
+        <p>border-radius的含义是：圆角。</br>
+            border-radius是一种缩写方法。如果“/”前后的值都存在，那么“/”前面的值设置其水平半径，“/”后面值设置其垂直半径。</p>
+        <p>可以有这种操作->border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;</p>
+    </div>
+    <div>
+        <span class="Que">Question:</span>
+        <p>利用border画各种形状技巧</p>
+    </div>
+    <div>
+        <span class="Ans">Answer:</span>
+        <p>在border交界处（如border-top与border-right），会按照其各自的border-width之比划分界限</p>
+        <img src="border.png">
+        <p>图中border-left:none;border-bottom:none;(或者可以看成border交界处的放大图)</p>
+    </div>
+    <div>
+        <span class="Que">Question:</span>
         <p>严格模式主要有哪些限制</p>
     </div>
     <div>
@@ -179,59 +207,55 @@ p {
     <div>
         <span class="Ans">Answer:</span>
         <p>$(document).on("click", ".p2", function() {</br>
-        &nbsp;&nbsp;previmg();</br>
-        &nbsp;&nbsp;return false; //返回一个false值，让a标签不跳转</br>
-        });</br>
-        return false;</br>
-        等价于</br>
-        event.preventDefault();//阻止事件的默认行为</br>
-        event.stopPropagation();//阻止该dom节点往上冒泡</br>
-        </br>
-
-&lt;body&gt;&lt;form id="form1" runat="server"&gt;&lt;div id="divOne" onclick="alert('我是最外层');"&gt;&lt;div id="divTwo" onclick="alert('我是中间层！')"&gt;&lt;a id="hr_three" href="http://www.baidu.com" mce_href="http://www.baidu.com"onclick="alert('我是最里层！')"&gt;点击我&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/form&gt;&lt;/body&gt; 
-比如上面这个页面，</br>
-分为三层：divOne是第外层，divTwo中间层，hr_three是最里层;</br>
-他们都有各自的click事件，最里层a标签还有href属性。</br>
- </br>
-运行页面，点击“点击我”,会依次弹出：我是最里层---->我是中间层---->我是最外层</br>
----->然后再链接到百度.</br>
- </br>
-这就是事件冒泡，本来我只点击ID为hr_three的标签，但是确执行了三个alert操作。</br>
-事件冒泡过程（以标签ID表示）：hr_three----> divTwo----> divOne 。从最里层冒泡到最外层。</br>
- </br>
-如何来阻止?</br>
- </br>
-1.event.stopPropagation(); </br>
-</br>
-        $(function() {</br>
+            &nbsp;&nbsp;previmg();</br>
+            &nbsp;&nbsp;return false; //返回一个false值，让a标签不跳转</br>
+            });</br>
+            return false;</br>
+            等价于</br>
+            event.preventDefault();//阻止事件的默认行为</br>
+            event.stopPropagation();//阻止该dom节点往上冒泡</br>
+            </br>
+            &lt;body&gt;&lt;form id="form1" runat="server"&gt;&lt;div id="divOne" onclick="alert('我是最外层');"&gt;&lt;div id="divTwo" onclick="alert('我是中间层！')"&gt;&lt;a id="hr_three" href="http://www.baidu.com" mce_href="http://www.baidu.com"onclick="alert('我是最里层！')"&gt;点击我&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/form&gt;&lt;/body&gt; 比如上面这个页面，
+            </br>
+            分为三层：divOne是第外层，divTwo中间层，hr_three是最里层;</br>
+            他们都有各自的click事件，最里层a标签还有href属性。</br>
+            </br>
+            运行页面，点击“点击我”,会依次弹出：我是最里层---->我是中间层---->我是最外层</br>
+            ---->然后再链接到百度.</br>
+            </br>
+            这就是事件冒泡，本来我只点击ID为hr_three的标签，但是确执行了三个alert操作。</br>
+            事件冒泡过程（以标签ID表示）：hr_three----> divTwo----> divOne 。从最里层冒泡到最外层。</br>
+            </br>
+            如何来阻止?</br>
+            </br>
+            1.event.stopPropagation(); </br>
+            </br>
+            $(function() {</br>
             &nbsp;&nbsp;$("#hr_three").click(function(event) {</br>
-               &nbsp;&nbsp;&nbsp;&nbsp; event.stopPropagation();</br>
-           &nbsp;&nbsp; });</br>
-        });</br>
-   </br>    
-再点击“点击我”，会弹出：我是最里层，然后链接到百度</br>
- 
- </br>
- 2.return false;</br>
-如果头部加入的是以下代码</br>
- $(function() { $("#hr_three").click(function(event) { return false; }); }); </br>
-再点击“点击我”，会弹出：我是最里层，但不会执行链接到百度页面</br>
- </br>
-由此可以看出：</br>
-1.event.stopPropagation(); </br>
-   &nbsp;&nbsp;事件处理过程中，阻止了事件冒泡，但不会阻击默认行为（它就执行了超链接的跳转）</br>
- </br>
- 
-2.return false;</br>
-   &nbsp;&nbsp;事件处理过程中，阻止了事件冒泡，也阻止了默认行为（比如刚才它就没有执行超链接的跳转）</br>
- 
- </br>
-还有一种有冒泡有关的：</br>
-3.event.preventDefault(); </br>
-   &nbsp;&nbsp;如果把它放在头部A标签的click事件中，点击“点击我”。</br>
-   会发现它依次弹出：我是最里层----&gt;我是中间层----&gt;我是最外层，但最后却没有跳转到百度</br>
- </br>
-    它的作用是：事件处理过程中，不阻击事件冒泡，但阻击默认行为（它只执行所有弹框，却没有执行超链接跳转）</br>
+            &nbsp;&nbsp;&nbsp;&nbsp; event.stopPropagation();</br>
+            &nbsp;&nbsp; });</br>
+            });</br>
+            </br>
+            再点击“点击我”，会弹出：我是最里层，然后链接到百度</br>
+            </br>
+            2.return false;</br>
+            如果头部加入的是以下代码</br>
+            $(function() { $("#hr_three").click(function(event) { return false; }); }); </br>
+            再点击“点击我”，会弹出：我是最里层，但不会执行链接到百度页面</br>
+            </br>
+            由此可以看出：</br>
+            1.event.stopPropagation(); </br>
+            &nbsp;&nbsp;事件处理过程中，阻止了事件冒泡，但不会阻击默认行为（它就执行了超链接的跳转）</br>
+            </br>
+            2.return false;</br>
+            &nbsp;&nbsp;事件处理过程中，阻止了事件冒泡，也阻止了默认行为（比如刚才它就没有执行超链接的跳转）</br>
+            </br>
+            还有一种有冒泡有关的：</br>
+            3.event.preventDefault(); </br>
+            &nbsp;&nbsp;如果把它放在头部A标签的click事件中，点击“点击我”。</br>
+            会发现它依次弹出：我是最里层----&gt;我是中间层----&gt;我是最外层，但最后却没有跳转到百度</br>
+            </br>
+            它的作用是：事件处理过程中，不阻击事件冒泡，但阻击默认行为（它只执行所有弹框，却没有执行超链接跳转）</br>
         </p>
     </div>
 </body>
