@@ -85,28 +85,28 @@
         var position = getPosition(e);
         if (isAdded) {
             datePickerShower.after(
-                "<div id='dateSelecter' class='dateSelecter'>" +
-	                "<div class='TopBar'>" +
-		                "<span class='preMonth'>上一月</span>" +
-		                "<span class='checkedMonth'></span>" +
-		                "<span class='nextMonth'>下一月</span>" +
-		                "<span class='clearfloat'></span>" +
-	                "</div>" +
-                	"<table>" +
-                		"<thead>" +
-                			"<tr>" +
-				                "<th>日</th>" +
-				                "<th>一</th>" +
-				                "<th>二</th>" +
-				                "<th>三</th>" +
-				                "<th>四</th>" +
-				                "<th>五</th>" +
-                				"<th>六</th>" +
-                			"</tr>" +
-                		"</thead>" +
-                		"<tbody></tbody>" +
-                	"</table>" +
-                "</div>");
+                `<div id='dateSelecter' class='dateSelecter'>
+	                <div class='TopBar'>
+		                <span class='preMonth'>上一月</span>
+		                <span class='checkedMonth'></span>
+		                <span class='nextMonth'>下一月</span>
+		                <span class='clearfloat'></span>
+	                </div>
+                	<table>
+                		<thead>
+                			<tr>
+				                <th>日</th>
+				                <th>一</th>
+				                <th>二</th>
+				                <th>三</th>
+				                <th>四</th>
+				                <th>五</th>
+                				<th>六</th>
+                			</tr>
+                		</thead>
+                		<tbody></tbody>
+                	</table>
+                </div>`);
             dateSelecter = $("#dateSelecter");
             dateSelecter.hide(); //一开始隐藏
             $('.preMonth').on('click', preMonth);

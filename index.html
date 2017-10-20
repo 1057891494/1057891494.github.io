@@ -63,6 +63,24 @@ p {
     </div>
     <div>
         <span class="Que">Question:</span>
+        <p>把类数组对象转化为数组</p>
+    </div>
+    <div>
+        <span class="Ans">Answer:</span>
+        <p>类数组对象有：{'0': 'a','1': 'b','2': 'c',length: 3};（单层结构）和可遍历（iterable）的对象（包括ES6新增的数据结构Set和Map）</br>
+            let arrayLike = { '0': 'a', '1': 'b', '2': 'c', length: 3 }; </br>
+            // ES5的写法 var arr1 = [].slice.call(arrayLike); // ['a', 'b', 'c'] </br>
+            等价于var arr1 = Array.prototype.slice.call(arrayLike); </br>
+            // ES6的写法 let arr2 = Array.from(arrayLike); // ['a', 'b', 'c']</br>
+            实际应用中，常见的类似数组的对象是DOM操作返回的NodeList集合，以及函数内部的arguments对象。
+            Array.from都可以将它们转为真正的数组。</br>
+            Array.of方法用于将一组值，转换为数组。</br>
+            Array.of(3, 11, 8) // [3,11,8]</br>
+            Array.of(3) // [3]</br>
+        </p>
+    </div>
+    <div>
+        <span class="Que">Question:</span>
         <p>控制台弹出未添加注解警告</p>
     </div>
     <div>
