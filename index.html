@@ -97,6 +97,20 @@ p {
     </div>
     <div>
         <span class="Que">Question:</span>
+        <p>判断传入参数类型</p>
+    </div>
+    <div>
+        <span class="Ans">Answer:</span>
+        <p>常用的有typeof,对于数组有Array.isArray()</br>
+            可以使用该方法判断类型：该方法返回类型的小写</br>
+            function judgeType(args){</br>
+                return /.*\s(.*)\]$/.exec(Object.prototype.toString.call(args))[1].toLowerCase();</br>
+            }</br>
+            目前(array,number,object,date,string,regexp,function,null,undefined)已通过测试
+        </p>
+    </div>
+    <div>
+        <span class="Que">Question:</span>
         <p>本人新手，在学习阮一峰大师的ES6，看到这里：</br>
             async function logInOrder(urls) {</br>
             </br>
@@ -174,26 +188,26 @@ p {
     </div>
     <div>
         <span class="Ans">Answer:</span>
-        <p>CSS里面em是什么鬼</p>
+        <p>border-radius的含义是：圆角。</br>
+            border-radius是一种缩写方法。如果“/”前后的值都存在，那么“/”前面的值设置其水平半径，“/”后面值设置其垂直半径。</p>
+        <p>可以有这种操作->border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;</p>
     </div>
     <div>
         <span class="Que">Question:</span>
-        <p>滚动条触底</p>
+        <p>CSS里面em是什么鬼</p>
+    </div>
+    <div>
+        <span class="Ans">Answer:</span>
+        <p>em表示倍数1em即一倍,一般body默认font-size:16px,所以1em=16px;可以更改body中font-size的值，从而改变1em的大小</p>
+    </div>
+    <div>
+        <span class="Que">Question:</span>
+        <p>让滚动条触底</p>
     </div>
     <div>
         <span class="Ans">Answer:</span>
         <p>JQuery: textarea.scrollTop(textarea.height());</br>
             //等价于JS: textarea[0].scrollTop=textarea[0].scrollHeight;</p>
-    </div>
-    <div>
-        <span class="Que">Question:</span>
-        <p>em表示倍数1em即一倍,一般body默认font-size:16px,所以1em=16px;可以更改body中font-size的值，从而改变1em的大小</p>
-    </div>
-    <div>
-        <span class="Ans">Answer:</span>
-        <p>border-radius的含义是：圆角。</br>
-            border-radius是一种缩写方法。如果“/”前后的值都存在，那么“/”前面的值设置其水平半径，“/”后面值设置其垂直半径。</p>
-        <p>可以有这种操作->border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;</p>
     </div>
     <div>
         <span class="Que">Question:</span>
