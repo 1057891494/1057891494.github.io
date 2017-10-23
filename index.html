@@ -63,6 +63,68 @@ p {
     </div>
     <div>
         <span class="Que">Question:</span>
+        <p>apply</p>
+    </div>
+    <div>
+        <span class="Ans">Answer:</span>
+        <p>function Person(name){</br>
+            &nbsp;&nbsp;this.name=name;</br>
+            &nbsp;&nbsp;this.sayname=function (){</br>
+            &nbsp;&nbsp;&nbsp;&nbsp;alert(this.name);</br>
+            &nbsp;&nbsp;}</br>
+            }</br>
+            function Student(name){</br>
+            &nbsp;&nbsp;//① Person.apply(this,arguments);用这种方法实现继承</br>
+            &nbsp;&nbsp;//② return new Person(name);勉强算继承</br>
+            &nbsp;&nbsp;//③ Person(arguments);没有实现继承，sayname方法不可用</br>
+            }</br>
+            var xiaoming=new Student("小明");</br>
+            xiaoming.sayname();</br>
+        </p>
+    </div>
+    <div>
+        <span class="Que">Question:</span>
+        <p>String的replace()方法</p>
+    </div>
+    <div>
+        <span class="Ans">Answer:</span>
+        <p>var result = phoneNumber.replace(/^(\d{3})(\d{4})(\d{4})$/,'$1'+flag+'$2'+flag+'$3');
+        </p>
+    </div>
+    <div>
+        <span class="Que">Question:</span>
+        <p>判断实例</p>
+    </div>
+    <div>
+        <span class="Ans">Answer:</span>
+        <p>function Ninja(){}</br>
+            var ninja=new Ninja();</br>
+            typeof ninja //"object"</br>
+            ninja instanceof Ninja //true</br>
+            ninja.constructor==Ninja //true</br>
+        </p>
+    </div>
+    <div>
+        <span class="Que">Question:</span>
+        <p>继承和复制的选择</p>
+    </div>
+    <div>
+        <span class="Ans">Answer:</span>
+        <p>对于自己定义的构造器可以选择prototype属性来继承，但如果想对原生的对象如Array,Object等进行扩张，最好不要通过继承来实现，可以在自定义对象上通过call apply来实现。如：</br>
+            function MyArray(){}</br>
+            MyArray.prototype.length=0;</br>
+            (function(){</br>
+            &nbsp;&nbsp;var methods=['push','pop','shift',"unshift",'slice','splice','join'];</br>
+            &nbsp;&nbsp;for(var i=0;i&lt;methods.length;i++)</br>&nbsp;&nbsp;&nbsp;&nbsp;(function(name){</br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MyArray.prototype[name]=function(){</br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return Array.prototype[name].apply(this,arguments);</br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};</br>
+            &nbsp;&nbsp;&nbsp;&nbsp;})(methods[i]);</br>
+            })();</br>
+        </p>
+    </div>
+    <div>
+        <span class="Que">Question:</span>
         <p>把类数组对象转化为数组</p>
     </div>
     <div>
@@ -72,8 +134,8 @@ p {
             // ES5的写法 var arr1 = [].slice.call(arrayLike); // ['a', 'b', 'c'] </br>
             等价于var arr1 = Array.prototype.slice.call(arrayLike); </br>
             // ES6的写法 let arr2 = Array.from(arrayLike); // ['a', 'b', 'c']</br>
-            实际应用中，常见的类似数组的对象是DOM操作返回的NodeList集合，以及函数内部的arguments对象。
-            Array.from都可以将它们转为真正的数组。</br>
+            实际应用中，常见的类似数组的对象是DOM操作返回的NodeList集合，以及函数内部的arguments对象。 Array.from都可以将它们转为真正的数组。
+            </br>
             Array.of方法用于将一组值，转换为数组。</br>
             Array.of(3, 11, 8) // [3,11,8]</br>
             Array.of(3) // [3]</br>
@@ -104,9 +166,19 @@ p {
         <p>常用的有typeof,对于数组有Array.isArray()</br>
             可以使用该方法判断类型：该方法返回类型的小写形式</br>
             function judgeType(args){</br>
-                return /.*\s(.*)\]$/.exec(Object.prototype.toString.call(args))[1].toLowerCase();</br>
+            return /.*\s(.*)\]$/.exec(Object.prototype.toString.call(args))[1].toLowerCase();</br>
             }</br>
             目前(array,number,object,date,string,regexp,function,null,undefined)已通过测试
+        </p>
+    </div>
+    <div>
+        <span class="Que">Question:</span>
+        <p>hasOwnProperty</p>
+    </div>
+    <div>
+        <span class="Ans">Answer:</span>
+        <p>hasOwnProperty()函数用于指示一个对象自身(不包括原型链)</br>是否具有指定名称的属性。如果有，返回true，否则返回false。</br>
+            该方法属于Object对象，由于所有的对象都"继承"了Object的对象实例，因此几乎所有的实例对象都可以使用该方法。
         </p>
     </div>
     <div>
