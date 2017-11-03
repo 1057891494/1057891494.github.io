@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN" v-app="ibsapp">
+
+<head>
+    <!-- 编码格式是utf-8 -->
+    <meta charset="utf-8">
+    <!-- 使用chrome渲染，没有chrome使用最高版本的IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <!-- 屏幕逻辑宽度与等于设备宽度，初始缩放比例为1,用户不可以缩放比例,最大放大比例，最小缩放比例-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no,maximum-scale=1" />
+    <!-- 数字不当做电话拨出去 禁止邮件自动跳转-->
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="format-detection" content="email=no" />
+    <meta name="author" content="CSII" />
+    <title>VX移动端wap版开发产品原型</title>
+</head>
+
+<body>
+    <div style="display: block; float: left; width: 320px; overflow: hidden; height: 126px;">
+        <marquee align="middle" direction="left" loop="-1" scrollamount="10" scrolldelay="100" behavior="scroll" style="position: relative;">
+            <img src="img/1.png " width="320 " height="240 " style="position: relative;" />
+            <img src="img/2.png " width="320 " height="240 " style="position: relative;" />
+            <img src="img/3.png " width="320 " height="240 " style="position: relative;" />
+        </marquee>
+    </div>
+    <!-- jquery引用 -->
+    <script type="text/javascript " src="jquery-1.11.1.min.js "></script>
+    <script>
+    //var int;
+    function doit() {
+        //debugger;
+        $('marquee')[0].start();
+        while (Array.from($('marquee').children()).some(function(ele) {
+                //debugger;
+                console.log($(ele).position().left);
+                return $(ele).position().left == 0 ? false : (function() { $('marquee')[0].start();; return true; })();
+            })) {}
+        $('marquee')[0].stop();
+        setTimeout(doit, 2000);
+    }
+
+    function dontdoit() {
+        //debugger;
+        $('marquee')[0].stop();
+    }
+    $('marquee').on('mouseover', dontdoit);
+    $('marquee').on('mouseout', doit);
+    </script>
+</body>
+
+</html>
