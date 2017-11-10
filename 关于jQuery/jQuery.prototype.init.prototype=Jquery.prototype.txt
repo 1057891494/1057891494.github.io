@@ -1,0 +1,43 @@
+Jquery中,jQuery()其实相当于new jQuery()
+
+1.为了实现这种功能首相会使用：
+var jQuery=function(){
+	return new jQuery;
+}
+但这种方法会导致循环调用出错
+
+2.于是考虑将获得对象的方法定义在 jQuery.prototype对象的属性中
+var jQuery=function(){
+	return jQuery.prototype.init();
+}
+jQuery.prototype={
+	init:function(){
+		return this;
+	},
+	jquery:'1.11'
+};
+但是采用这种写法会导致 jQuery.prototype暴露出去
+
+3.因此采用new这种构造方法
+var jQuery=function(){
+	return new jQuery.prototype.init();
+}
+jQuery.prototype={
+	init:function(){
+		return this;
+	},
+	jquery:'1.11'
+};
+这种写法返回的对象 (继承的是Object)与jQuery的特性失去了联系
+
+4.于是需要将该对象与jQuery建立联系
+var jQuery=function(){
+	return new jQuery.prototype.init();
+}
+jQuery.prototype={
+	init:function(){
+		return this;
+	},
+	jquery:'1.11'
+};
+jQuery.prototype.init.prototype=jQuery.prototype;
